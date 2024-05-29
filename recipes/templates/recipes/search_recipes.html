@@ -1,0 +1,41 @@
+{% extends "recipes/base.html"  %}
+<!-- -->
+{% block content %}
+  {% if searched %}
+  <h1>You searched for {{ searched }}</h1>
+  <br/>
+  {% for recipe in recipes %}
+        <div class="card my-4" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{ recipe.category }}</h5><br/>
+              <h5 class="card-title">{{ recipe.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ recipe.author }}</h6>
+              <p class="card-text">{{ recipe.description }}</p>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ recipe.updated_at|date:"F d, Y" }}</h6>
+              {% if recipe.recipe_image %}
+              <img src="{{ recipe.recipe_image.url }}">
+              {% endif %}
+              <a href="{% url "recipes-detail" recipe.pk %}" class="card-link">View Recipe</a>
+            </div>
+          </div>
+  {% endfor %}
+  {% else %}
+  <h1>Search Recipes</h1>
+  {% endif %}
+
+
+{% endblock content %}
+
+
+
+    {% comment %} {% for recipe in recipes %}
+        <div class="card my-4" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{ recipe.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ recipe.author }}</h6>
+              <p class="card-text">{{ recipe.description }}</p>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ recipe.updated_at|date:"F d, Y" }}</h6>
+              <a href="{% url "recipes-detail" recipe.pk %}" class="card-link">View Recipe</a>
+            </div>
+          </div> {% endcomment %}
+    {% comment %} {% endfor %} {% endcomment %}

@@ -1,0 +1,29 @@
+{% extends "recipes/base.html"  %}
+<!-- -->
+{% block content %}
+    <h1>Recipes # {{object.id}}</h1>
+        <div class="card my-4" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{ object.category }}</h5><br/>
+              <h5 class="card-title">{{ object.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ object.author }}</h6>
+              <p class="card-text">{{ object.description }}</p>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{ object.updated_at|date:"F d, Y" }}</h6>
+              {% if recipe.recipe_image %}
+              <img src="{{ recipe.recipe_image.url }}">
+              {% endif %}
+            </div>
+          </div>
+          
+          {% if object.author == user or user.is_staff %}
+          <div class="col-4">
+            <a href="{% url "recipes-update" object.id %}" class="btn btn-outline-info">Update</a>
+            <a href="{% url "recipes-delete" object.id %}" class="btn btn-outline-danger">Delete</a>
+          </div>
+          {% comment %} <div id='favourite-section'>
+            <a href='#'>
+            <i class="fa-regular fa-heart fa-lg"></i>
+          </div> {% endcomment %}
+            {% endif %}
+          
+    {% endblock content %}
