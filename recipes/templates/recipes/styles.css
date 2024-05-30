@@ -1,0 +1,62 @@
+body {
+    font-family: 'Lato', sans-serif; /* Font modern dan mudah dibaca */
+    line-height: 1.6; /* Jarak baris yang nyaman */
+    background-color: #f4f4f4; /* Warna latar belakang netral */
+    color: #333; /* Warna teks yang kontras */
+}
+
+.container {
+    max-width: 960px; /* Lebar container yang sesuai */
+    margin: 0 auto; /* Pusatkan container */
+}
+
+/* NAVBAR STYLING */
+.navbar {
+    background-color: #28a745; /* Warna navbar yang sesuai tema kuliner */
+    padding: 1rem 0; /* Tambahkan sedikit padding */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.nav-link {
+    color: #fff; /* Warna teks putih di navbar */
+    margin-right: 1rem;
+}
+
+.nav-link:hover {
+    color: #ffc107; /* Efek hover pada link */
+}
+
+/* FORM STYLING */
+.form-control {
+    border-radius: 0; /* Hilangkan border radius bawaan Bootstrap */
+}
+
+.btn-outline-secondary {
+    border-radius: 0;
+}
+
+/* CONTENT STYLING */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.alert {
+    border-radius: 0;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column; /* Ubah menjadi tampilan kolom di layar kecil */
+        align-items: center;
+    }
+
+    .nav-link {
+        margin-bottom: 0.5rem;
+    }
+}

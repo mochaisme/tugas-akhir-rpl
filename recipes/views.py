@@ -1,84 +1,72 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+from .models import Recipe, Category
 from django.forms import ModelForm
 
-from . import models
-
-# Create your views here.
 def home(request):
-    recipes = models.Recipe.objects.all()
+    recipes = Recipe.objects.all().order_by('-created_at')
     context = {
         'recipes': recipes
     }
     return render(request, 'recipes/home.html', context)
 
 class RecipeListView(ListView):
-    model = models.Recipe
+    model = Recipe
     template_name = 'recipes/home.html'
-    cats = models.Category.objects.all()
     context_object_name = 'recipes'
-    
+    ordering = ['-created_at']  # Ensure the list view is ordered by created_at
+
     def get_context_data(self, *args, **kwargs):
-        cat_menu = models.Category.objects.all()
+        cat_menu = Category.objects.all()
         context = super(RecipeListView, self).get_context_data(**kwargs)
         context['cat_menu'] = cat_menu
         return context
-    
+
 class RecipeDetailView(DetailView):
-    model = models.Recipe
-    
+    model = Recipe
+
 class RecipeCreateView(LoginRequiredMixin, CreateView):
-    model = models.Recipe
-    fields = ['title', 'description','category', 'recipe_image']
-    
+    model = Recipe
+    fields = ['title', 'description', 'category', 'recipe_image']
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-    
+
 class RecipeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = models.Recipe
-    fields = ['title', 'description','category', 'recipe_image']
-    
+    model = Recipe
+    fields = ['title', 'description', 'category', 'recipe_image']
+
     def test_func(self):
         recipe = self.get_object()
-        if self.request.user == recipe.author or self.request.user.is_staff:
-            return True
-        return False
-    
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-    
+        return self.request.user == recipe.author or self.request.user.is_staff
+
 class RecipeDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = models.Recipe
+    model = Recipe
     success_url = reverse_lazy('recipes-home')
-    
+
     def test_func(self):
         recipe = self.get_object()
-        if self.request.user == recipe.author or self.request.user.is_staff:
-            return True
-        return False
-    
+        return self.request.user == recipe.author or self.request.user.is_staff
+
 def about(request):
     return render(request, 'recipes/about.html', {'title': 'About us page'})
 
 def search_recipes(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        recipes = models.Recipe.objects.filter(title__contains=searched)
+        recipes = Recipe.objects.filter(title__icontains=searched)
         return render(request, 'recipes/search_recipes.html', {'searched': searched, 'recipes': recipes})
     else:
         return render(request, 'recipes/search_recipes.html', {'title': 'Search Recipes'})
 
-#Ini yang terakhir
-
 class RecipeForm(ModelForm):
     class Meta:
-        model = models.Recipe
+        model = Recipe
         fields = ['title', 'description', 'category', 'recipe_image']
 
 def category_view(request, cats):
-    category_recipes = models.Recipe.objects.filter(category=cats)
+    category_recipes = Recipe.objects.filter(category=cats)
     return render(request, 'recipes/category_view.html', {'cats': cats, 'category_recipes': category_recipes})

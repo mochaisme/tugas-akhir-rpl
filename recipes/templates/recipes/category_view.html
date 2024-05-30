@@ -5,6 +5,9 @@
     <ul>
         {% for recipe in category_recipes %}
         <div class="card my-4" style="width: 18rem;">
+          {% if recipe.recipe_image %}
+          <img src="{{ recipe.recipe_image.url }}" class="card-img-top" alt="Recipe Image">
+          {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ recipe.title }}</h5>
               <h6 class="card-subtitle mb-2 text-body-secondary">{{ recipe.author }}</h6>
